@@ -51,7 +51,6 @@ type SupabasePropertyRaw = {
   };
 };
 
-
 export default function PropertyListing() {
   const [activeFilter, setActiveFilter] = useState<string | null>(null)
   const [newProperties, setNewProperties] = useState<PropertyData[]>([])

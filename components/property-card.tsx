@@ -19,7 +19,7 @@ export interface PropertyData {
   price: string
   isPricePerMonth?: boolean
   details: PropertyDetails
-  image: string
+  image: string | string[]
   isForRent?: boolean
   isForSale?: boolean
   isTopPick?: boolean
@@ -39,15 +39,53 @@ export function PropertyCard({ property }: PropertyCardProps) {
   // Determine the button text based on property type
   const buttonText = isForRent ? "ให้เช่า" : isForSale ? "ขาย" : "ให้เช่า"
 
-  // ตรวจสอบว่า URL รูปภาพเป็น URL ที่ถูกต้องหรือไม่
-  const isValidImageUrl = image && (
-    image.startsWith("https://") ||
-    image.startsWith("http://") ||
-    image.startsWith("/")
+  // แปลง image เป็น URL ที่ใช้งานได้
+  let imageUrl = "";
+
+  try {
+    // กรณีที่ image เป็น array
+    if (Array.isArray(image)) {
+      if (image.length > 0) {
+        const firstImage = image[0];
+        // ตรวจสอบว่าเป็น JSON string หรือไม่
+        if (typeof firstImage === "string") {
+          if (firstImage.startsWith("{")) {
+            // กรณีเป็น JSON string ที่มี url อยู่ภายใน
+            const parsedImage = JSON.parse(firstImage);
+            imageUrl = parsedImage.url || "";
+          } else {
+            // กรณีเป็น URL ตรงๆ
+            imageUrl = firstImage;
+          }
+        }
+      }
+    }
+    // กรณีที่ image เป็น string เดี่ยว
+    else if (typeof image === "string") {
+      if (image.startsWith("{")) {
+        // กรณีเป็น JSON string
+        const parsedImage = JSON.parse(image);
+        imageUrl = parsedImage.url || "";
+      } else {
+        // กรณีเป็น URL ตรงๆ
+        imageUrl = image;
+      }
+    }
+  } catch (err) {
+    console.error(`Failed to parse image data for property ${id}:`, err);
+  }
+
+  // ตรวจสอบว่า imageUrl ใช้งานได้จริง
+  const isValidImageUrl = imageUrl && (
+    imageUrl.startsWith("https://") ||
+    imageUrl.startsWith("http://") ||
+    imageUrl.startsWith("/")
   );
 
-  // ใช้รูป placeholder ถ้า URL ไม่ถูกต้อง
-  const displayImage = isValidImageUrl ? image : "/placeholder.svg";
+  const displayImage = isValidImageUrl ? imageUrl : "/placeholder.svg"; // fallback ถ้า URL ผิด
+
+  console.log(`Property ID: ${id}, Image URL:`, imageUrl);
+  console.log(`Valid image for "${title}":`, isValidImageUrl);
 
   return (
     <Link href={`/property/${id}`} className="block">

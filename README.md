@@ -127,3 +127,8 @@ Visit `http://localhost:3000` to view the application.
 - React
 - Tailwind CSS
 - Supabase (PostgreSQL database)
+
+## DDDDD
+- npm install -g pnpm
+- pnpm install
+- pnpm run dev

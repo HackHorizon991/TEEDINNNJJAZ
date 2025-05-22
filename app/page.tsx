@@ -302,7 +302,7 @@ export default function PropertyListing() {
               </div>
             )}
 
-            {debugLogs.length > 0 && (
+            {/* {debugLogs.length > 0 && (
               <div className="container mx-auto px-4 mt-4 mb-4">
                 <details className="bg-gray-100 p-4 rounded-lg shadow">
                   <summary className="font-medium cursor-pointer text-gray-700 hover:text-black">
@@ -315,7 +315,8 @@ export default function PropertyListing() {
                   </div>
                 </details>
               </div>
-            )}
+            )} */}
+            
             <div className="container mx-auto px-4 mt-10 mb-12">
               <PropertySection title="อสังหามาใหม่ล่าสุด! พร้อมเข้าอยู่/ลงทุน ราคาดี ทำเลเด่น" properties={newProperties} />
             </div>
